@@ -23,10 +23,21 @@ NotesWindow::NotesWindow(QWidget *parent) :
     ui->treeView->hideColumn(2);
 
     connect(ui->lineEdit, SIGNAL(textChanged(QString)), filesFilter, SLOT(setFilterFixedString(QString)));
+    connect(ui->treeView, SIGNAL(activated(const QModelIndex &)), SLOT(treeView_selected(const QModelIndex &)));
 }
 
 NotesWindow::~NotesWindow()
 {
     delete ui;
+}
+
+void NotesWindow::treeView_selected(const QModelIndex &index)
+{
+    QFile file(files->filePath(filesFilter->mapToSource(index)));
+    if (file.open(QFile::ReadOnly | QFile::Text)) {
+        QTextStream stream(&file);
+        ui->textEdit->setPlainText(stream.readAll());
+        file.close();
+    }
 }
 

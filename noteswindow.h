@@ -17,6 +17,9 @@ public:
     explicit NotesWindow(QWidget *parent = 0);
     ~NotesWindow();
 
+private slots:
+    void treeView_selected(const QModelIndex &index);
+
 private:
     Ui::NotesWindow *ui;
     QFileSystemModel *files;
